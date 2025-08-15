@@ -1,98 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Developer Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #007acc;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        main {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-        }
-        h1, h2 {
-            color: #007acc;
-        }
-        a {
-            color: #007acc;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .project, .social {
-            margin-bottom: 15px;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #ddd;
-            margin-top: 40px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Developer Page</title>
+  <link id="favicon" rel="icon" type="image/png" href="">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+    }
+
+    /* Fullscreen title section */
+    .intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    }
+    .intro h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .intro p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    /* Content area */
+    .content {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    .card h2 {
+      margin-top: 0;
+    }
+
+    /* Images */
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      margin-top: 15px;
+    }
+
+    /* Social links */
+    .social-link {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s ease;
+    }
+    .social-link:hover {
+      color: #fdbb2d;
+    }
+    .social-link img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+      border-radius: 0;
+      object-fit: contain;
+    }
+
+    /* Separator */
+    hr {
+      border: none;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 30px 0;
+    }
+  </style>
 </head>
 <body>
+  <!-- Fullscreen intro -->
+  <section class="intro">
+    <h1 id="intro-title"></h1>
+    <p id="intro-subtitle"></p>
+  </section>
 
-<header>
-    <h1>Hi, I'm Your Name</h1>
-    <p>Developer | Coder | Creator</p>
-</header>
+  <!-- Main content -->
+  <div class="content">
+    <div class="card" id="about-card">
+      <h2>About Me</h2>
+      <p id="about-text"></p>
+    </div>
 
-<main>
-    <section class="about">
-        <h2>About Me</h2>
-        <p>Hello! I'm a developer who loves building cool projects. You can see my work and contact me below.</p>
-    </section>
+    <hr>
 
-    <section class="projects">
-        <h2>Projects</h2>
-        <div class="project">
-            <h3>Project 1</h3>
-            <p>Description of your project.</p>
-            <a href="https://github.com/yourusername/project1" target="_blank">View on GitHub</a>
-            <br>
-            <img src="https://via.placeholder.com/400x200" alt="Project 1 Screenshot">
-        </div>
+    <div id="projects"></div>
 
-        <div class="project">
-            <h3>Project 2</h3>
-            <p>Description of your project.</p>
-            <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-            <br>
-            <img src="https://via.placeholder.com/400x200" alt="Project 2 Screenshot">
-        </div>
-    </section>
+    <hr>
 
-    <section class="social">
-        <h2>Connect with Me</h2>
-        <p>
-            <a href="https://github.com/yourusername" target="_blank">GitHub</a> |
-            <a href="https://twitter.com/yourusername" target="_blank">Twitter</a> |
-            <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
-        </p>
-    </section>
-</main>
+    <div class="card" id="contact-card">
+      <h2>Contact Me</h2>
+      <div id="contact-links"></div>
+    </div>
+  </div>
 
-<footer>
-    <p>&copy; 2025 Your Name</p>
-</footer>
+  <script>
+    const config = {
+      pageTitle: "My Dev Page",
+      favicon: "https://upload.wikimedia.org/wikipedia/commons/7/7e/OOjs_UI_icon_userAvatar.svg",
+      introTitle: "Welcome to My Portfolio",
+      introSubtitle: "Developer • Designer • Creator",
+      about: "I'm a passionate developer who loves creating web applications and experimenting with new technologies.",
+      projects: [
+        {
+          title: "Project One",
+          description: "A cool project built with HTML, CSS, and JS.",
+          image: "https://via.placeholder.com/400x200",
+          link: "https://example.com"
+        },
+        {
+          title: "Project Two",
+          description: "Another awesome project with neat features.",
+          image: "",
+          link: "https://example.com"
+        }
+      ],
+      contacts: [
+        { name: "GitHub", url: "https://github.com", icon: "https://cdn-icons-png.flaticon.com/512/25/25231.png" },
+        { name: "LinkedIn", url: "https://linkedin.com", icon: "https://cdn-icons-png.flaticon.com/512/174/174857.png" },
+        { name: "Twitter", url: "https://twitter.com", icon: "https://cdn-icons-png.flaticon.com/512/733/733579.png" }
+      ]
+    };
 
+    // Apply config
+    document.getElementById("page-title").textContent = config.pageTitle;
+    document.getElementById("favicon").href = config.favicon;
+    document.getElementById("intro-title").textContent = config.introTitle;
+    document.getElementById("intro-subtitle").textContent = config.introSubtitle;
+    document.getElementById("about-text").textContent = config.about;
+
+    // Projects
+    const projectContainer = document.getElementById("projects");
+    config.projects.forEach(proj => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const title = document.createElement("h2");
+      title.textContent = proj.title;
+      card.appendChild(title);
+
+      const desc = document.createElement("p");
+      desc.textContent = proj.description;
+      card.appendChild(desc);
+
+      if (proj.image) {
+        const img = document.createElement("img");
+        img.src = proj.image;
+        img.alt = proj.title;
+        card.appendChild(img);
+      }
+
+      if (proj.link) {
+        const link = document.createElement("a");
+        link.href = proj.link;
+        link.textContent = "View Project";
+        link.style.color = "#fdbb2d";
+        link.style.display = "inline-block";
+        link.style.marginTop = "10px";
+        card.appendChild(link);
+      }
+
+      projectContainer.appendChild(card);
+    });
+
+    // Contacts
+    const contactContainer = document.getElementById("contact-links");
+    config.contacts.forEach(contact => {
+      const link = document.createElement("a");
+      link.href = contact.url;
+      link.className = "social-link";
+      link.target = "_blank";
+
+      const icon = document.createElement("img");
+      icon.src = contact.icon;
+      icon.alt = contact.name;
+
+      const span = document.createElement("span");
+      span.textContent = contact.name;
+
+      link.appendChild(icon);
+      link.appendChild(span);
+
+      contactContainer.appendChild(link);
+    });
+  </script>
 </body>
 </html>
