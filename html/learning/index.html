@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Fairy Tale Book</title>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #1b1b2f, #162447);
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+h1 {
+    text-align: center;
+    padding: 40px 20px 20px 20px;
+    font-size: 3em;
+    color: #f3c677;
+    text-shadow: 0 0 10px #f3c677;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    position: relative;
+    background: linear-gradient(145deg, #2b2b3f, #1f1f2c);
+    border-radius: 20px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.6);
+    width: 320px;
+    padding: 25px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover {
+    transform: translateY(-15px) rotate(-1deg);
+    box-shadow: 0 20px 30px rgba(243,198,119,0.5);
+}
+
+.card h2 {
+    color: #f3c677;
+    margin-top: 0;
+    text-shadow: 0 0 5px #f3c677;
+}
+
+.card p {
+    font-size: 14px;
+    color: #ccc;
+}
+
+pre {
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 13px;
+    color: #e0e0e0;
+}
+
+code {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+img, video, audio, iframe {
+    max-width: 100%;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #f3c677, #ff7f50, #9b59b6, #3498db);
+    opacity: 0.15;
+    z-index: -1;
+    filter: blur(20px);
+    transition: opacity 0.4s;
+}
+
+.card:hover::before {
+    opacity: 0.5;
+}
+
+section {
+    padding-bottom: 50px;
+    border-bottom: 2px dashed rgba(243,198,119,0.2);
+    margin-bottom: 50px;
+}
+
+.faq {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>HTML Fairy Tale Book</h1>
+
+<!-- SECTION: Creating a Card -->
+<section id="cards">
+  <h1>Creating a Card</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Cards group related information. Use padding, shadows, and rounded corners for a magical effect.</p>
+      <pre><code>&lt;div class="card"&gt;
+  &lt;h2&gt;Title&lt;/h2&gt;
+  &lt;p&gt;Description&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can I have multiple cards in a row?<br>
+         <b>A:</b> Wrap cards in a flex container:<br>
+         <pre><code>&lt;div class="cards-container"&gt;
+  &lt;div class="card"&gt;Card 1&lt;/div&gt;
+  &lt;div class="card"&gt;Card 2&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </p>
+      <p><b>Q:</b> Can I use gradients inside a card?<br>
+         <b>A:</b> Example:<br>
+         <pre><code>.card {
+  background: linear-gradient(135deg, #f3c677, #ff7f50);
+}</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Floating Cards -->
+<section id="hover">
+  <h1>Floating / Hover Cards</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Hover effects can make cards lift and glow for a magical fairy-tale feel.</p>
+      <pre><code>.card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 20px 30px rgba(243,198,119,0.5);
+}</code></pre>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can I make hover effects slower or faster?<br>
+         <b>A:</b> Adjust the transition duration:<br>
+         <pre><code>.card {
+  transition: transform 0.7s ease, box-shadow 0.7s ease;
+}</code></pre>
+      </p>
+      <p><b>Q:</b> Will hover work on mobile?<br>
+         <b>A:</b> Use :active for touch feedback:<br>
+         <pre><code>.card:active {
+  transform: translateY(-15px);
+}</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Gradients -->
+<section id="gradients">
+  <h1>Gradients</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Gradients make elements colorful and magical. Try multiple colors.</p>
+      <pre><code>background: linear-gradient(145deg, #2b2b3f, #1f1f2c);</code></pre>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can I animate gradients?<br>
+         <b>A:</b> Yes! Example:<br>
+         <pre><code>@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.card {
+  background: linear-gradient(270deg,#f3c677,#ff7f50,#9b59b6,#3498db);
+  background-size: 600% 600%;
+  animation: gradientMove 10s ease infinite;
+}</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Text & Code -->
+<section id="text-code">
+  <h1>Text & Code</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Use &lt;p&gt; for text and &lt;pre&gt;&lt;code&gt; for code blocks.</p>
+      <pre><code>&lt;p&gt;Hello world&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;console.log("Hi");&lt;/code&gt;&lt;/pre&gt;</code></pre>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can I style &lt;code&gt; blocks?<br>
+         <b>A:</b> Example:<br>
+         <pre><code>code {
+  background: rgba(255,255,255,0.1);
+  padding: 3px 5px;
+  border-radius: 5px;
+}</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Links -->
+<section id="links">
+  <h1>Links</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Links navigate to other pages. target="_blank" opens a new tab.</p>
+      <pre><code>&lt;a href="https://google.com" target="_blank"&gt;Google&lt;/a&gt;</code></pre>
+      <p>Example: <a href="https://google.com" target="_blank">Google</a></p>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can I style links?<br>
+         <b>A:</b> Example:<br>
+         <pre><code>a {
+  color: #f3c677;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Images -->
+<section id="images">
+  <h1>Images</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Images bring your page to life. Always use alt text.</p>
+      <pre><code>&lt;img src="https://via.placeholder.com/150" alt="Example"&gt;</code></pre>
+      <img src="https://via.placeholder.com/150" alt="Example Image">
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Resize images with CSS?<br>
+         <b>A:</b> Example:<br>
+         <pre><code>img {
+  max-width: 100%;
+  height: auto;
+}</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Audio -->
+<section id="audio">
+  <h1>Audio</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Embed audio using &lt;audio&gt; with controls.</p>
+      <pre><code>&lt;audio controls&gt;
+  &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+      <audio controls>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can audio autoplay?<br>
+         <b>A:</b> Example:<br>
+         <pre><code>&lt;audio autoplay muted controls&gt;
+  &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Video -->
+<section id="video">
+  <h1>Video</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Embed videos with &lt;video&gt; and controls.</p>
+      <pre><code>&lt;video width="320" height="180" controls&gt;
+  &lt;source src="video.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+      <video width="320" height="180" controls>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> Can videos autoplay?<br>
+         <b>A:</b> Example:<br>
+         <pre><code>&lt;video autoplay muted controls&gt;
+  &lt;source src="video.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Forms -->
+<section id="forms">
+  <h1>Forms & Collecting Data</h1>
+  <div class="cards-container">
+    <div class="card">
+      <h2>Overview</h2>
+      <p>Forms let users input information. Use JavaScript to collect it.</p>
+      <pre><code>&lt;form id="fullForm"&gt;
+  &lt;input type="checkbox" name="hobby" value="Reading"&gt;Reading&lt;br&gt;
+  &lt;input type="radio" name="gender" value="Male"&gt;Male&lt;br&gt;
+  &lt;select id="country"&gt;&lt;option&gt;USA&lt;/option&gt;&lt;/select&gt;
+  &lt;textarea id="message"&gt;&lt;/textarea&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+    <div class="card faq">
+      <h2>FAQ</h2>
+      <p><b>Q:</b> How to collect form data?<br>
+         <b>A:</b> Example using JavaScript:<br>
+         <pre><code>const fullForm = document.getElementById('fullForm');
+fullForm.addEventListener('submit', function(event){
+  event.preventDefault();
+  const hobbies = Array.from(document.querySelectorAll('input[name="hobby"]:checked')).map(e => e.value);
+  const gender = document.querySelector('input[name="gender"]:checked')?.value;
+  const country = document.getElementById('country').value;
+  const message = document.getElementById('message').value;
+  console.log({hobbies, gender, country, message});
+});</code></pre>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+// Example: simple form collection
+const fullForm = document.getElementById('fullForm');
+if(fullForm){
+    fullForm.addEventListener('submit', function(event){
+        event.preventDefault();
+        const hobbies = Array.from(document.querySelectorAll('input[name="hobby"]:checked')).map(e => e.value);
+        const gender = document.querySelector('input[name="gender"]:checked')?.value;
+        const country = document.getElementById('country').value;
+        const message = document.getElementById('message').value;
+        console.log({hobbies, gender, country, message});
+        alert('Form submitted! Check console for data.');
+    });
+}
+</script>
+
+</body>
+</html>
