@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 Not Found</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: var(--bg-gradient, linear-gradient(135deg, #1e3c72, #2a5298));
+      color: var(--text-color, white);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: background 0.3s;
+    }
+    a {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: var(--link-bg, white);
+      color: var(--link-color, #2a5298);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    a:hover {
+      background: var(--link-hover-bg, #ddd);
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">404</h1>
+  <p id="message">Oops! The page you’re looking for doesn’t exist.</p>
+  <a id="home-link" href="/">Go back home</a>
+
+  <script>
+    const config = {
+      title: "404",
+      message: "The page you’re looking for doesn’t exist.",
+      homeLink: "/",
+      colors: {
+        bgGradient: "linear-gradient(135deg, #BA5050, #C73C7F, #C7873C)",
+        text: "white",
+        linkBg: "white",
+        linkColor: "#BA5050",
+        linkHoverBg: "#8F8F8F"
+      }
+    };
+
+    // Apply config
+    document.getElementById("title").textContent = config.title;
+    document.getElementById("message").textContent = config.message;
+    const homeLink = document.getElementById("home-link");
+    homeLink.href = config.homeLink;
+
+    document.body.style.setProperty('--bg-gradient', config.colors.bgGradient);
+    document.body.style.setProperty('--text-color', config.colors.text);
+    document.body.style.setProperty('--link-bg', config.colors.linkBg);
+    document.body.style.setProperty('--link-color', config.colors.linkColor);
+    document.body.style.setProperty('--link-hover-bg', config.colors.linkHoverBg);
+  </script>
+</body>
+</html>
