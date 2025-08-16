@@ -3,65 +3,205 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>404 Not Found</title>
+  <meta property="og:title" content="" id="og-title">
+  <meta property="og:description" content="" id="og-desc">
+  <meta property="og:image" content="" id="og-image">
+  <meta property="og:url" content="" id="og-url">
+  <meta property="og:type" content="website">
+  <title id="page-title">Project Page</title>
+  <link id="favicon" rel="icon" type="image/png" href="">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: var(--bg-gradient, linear-gradient(135deg, #1e3c72, #2a5298));
-      color: var(--text-color, white);
       margin: 0;
-      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+    }
+
+    /* Fullscreen intro */
+    .intro {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      transition: background 0.3s;
+      height: 60vh;
+      text-align: center;
+      background: linear-gradient(135deg, #BA5050, #C73C7F, #C7873C);
+      padding: 0 20px;
     }
-    a {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: var(--link-bg, white);
-      color: var(--link-color, #2a5298);
+    .intro h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .intro p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    /* Content */
+    .content {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* Card style */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+      margin-top: 15px;
+      border-radius: 0;
+    }
+
+    /* Social links */
+    .social-link {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
       text-decoration: none;
-      border-radius: 8px;
-      transition: background 0.2s;
+      color: inherit;
+      transition: color 0.3s ease;
     }
-    a:hover {
-      background: var(--link-hover-bg, #ddd);
+    .social-link:hover {
+      color: #fdbb2d;
+    }
+    .social-link img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+      object-fit: contain;
+    }
+
+    hr {
+      border: none;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 30px 0;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      margin-top: 15px;
+      color: #fdbb2d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .back-link:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1 id="title">404</h1>
-  <p id="message">Oops! The page you’re looking for doesn’t exist.</p>
-  <a id="home-link" href="/">Go back home</a>
+  <!-- Intro -->
+  <section class="intro">
+    <h1 id="intro-title"></h1>
+    <p id="intro-subtitle"></p>
+  </section>
+
+  <!-- Project content -->
+  <div class="content">
+    <div class="card">
+      <h2 id="project-title"></h2>
+      <p id="project-description"></p>
+      <img id="project-image" src="" alt="" style="display:none;">
+      <br>
+      <a id="project-link" href="" target="_blank" class="back-link" style="display:none;">Open Live Demo</a>
+      <br>
+      <a href="/" class="back-link">← Back to Developer Page</a>
+    </div>
+
+    <hr>
+
+    <!-- Contact section -->
+    <div class="card">
+      <h2>Contact Me</h2>
+      <div id="contact-links"></div>
+    </div>
+  </div>
 
   <script>
     const config = {
-      title: "403",
-      message: "This page has been restricted by the website creator. If you find this as a mistake please contact the Owner at ",
-      homeLink: "/",
-      colors: {
-        bgGradient: "linear-gradient(135deg, #BA5050, #C73C7F, #C7873C)",
-        text: "white",
-        linkBg: "white",
-        linkColor: "#BA5050",
-        linkHoverBg: "#8F8F8F"
-      }
+      pageTitle: "SystemError",
+      favicon: "",
+      introTitle: "SystemError Discord Application (Bot)",
+      introSubtitle: "https://tinyurl.com/systemerrorterms",
+      project: {
+        title: "System Error#7031",
+        description: "System Error was originally known as Solar System. I used discord.py for the code of System Error. I don't know what to say so if this changed you can thank someone.",
+        image: "",
+        link: "https://discord.com/oauth2/authorize?client_id=1390893394355818516"
+      },
+      contacts: [
+        { name: "Discord", url: "https://discord.gg/vVHXSPz9DS", icon: "https://cdn-icons-png.flaticon.com/128/5968/5968756.png" }
+      ]
     };
 
-    // Apply config
-    document.getElementById("title").textContent = config.title;
-    document.getElementById("message").textContent = config.message;
-    const homeLink = document.getElementById("home-link");
-    homeLink.href = config.homeLink;
+    // Meta + page settings
+    document.getElementById("page-title").textContent = config.pageTitle;
+    document.getElementById("favicon").href = config.favicon;
+    document.getElementById("og-title").setAttribute("content", config.pageTitle);
+    document.getElementById("og-desc").setAttribute("content", config.project.description);
+    document.getElementById("og-image").setAttribute("content", config.project.image);
+    document.getElementById("og-url").setAttribute("content", window.location.href);
 
-    document.body.style.setProperty('--bg-gradient', config.colors.bgGradient);
-    document.body.style.setProperty('--text-color', config.colors.text);
-    document.body.style.setProperty('--link-bg', config.colors.linkBg);
-    document.body.style.setProperty('--link-color', config.colors.linkColor);
-    document.body.style.setProperty('--link-hover-bg', config.colors.linkHoverBg);
+    // Intro
+    document.getElementById("intro-title").textContent = config.introTitle;
+    if (config.introSubtitle.trim() !== "") {
+      document.getElementById("intro-subtitle").textContent = config.introSubtitle;
+    } else {
+      document.getElementById("intro-subtitle").style.display = "none";
+    }
+
+    // Project
+    document.getElementById("project-title").textContent = config.project.title;
+    document.getElementById("project-description").textContent = config.project.description;
+
+    if (config.project.image.trim() !== "") {
+      const img = document.getElementById("project-image");
+      img.src = config.project.image;
+      img.alt = config.project.title;
+      img.style.display = "block";
+    }
+
+    if (config.project.link.trim() !== "") {
+      const link = document.getElementById("project-link");
+      link.href = config.project.link;
+      link.style.display = "inline-block";
+    }
+
+    // Contacts
+    const contactContainer = document.getElementById("contact-links");
+    config.contacts.forEach(contact => {
+      const link = document.createElement("a");
+      link.href = contact.url;
+      link.className = "social-link";
+      link.target = "_blank";
+
+      const icon = document.createElement("img");
+      icon.src = contact.icon;
+      icon.alt = contact.name;
+
+      const span = document.createElement("span");
+      span.textContent = contact.name;
+
+      link.appendChild(icon);
+      link.appendChild(span);
+
+      contactContainer.appendChild(link);
+    });
   </script>
 </body>
 </html>
