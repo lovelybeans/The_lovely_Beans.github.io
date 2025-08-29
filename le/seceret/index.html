@@ -1,0 +1,282 @@
+<!-- content.html -->
+<section class="members-app" aria-label="Members Area">
+  <style>
+    /* ==== Scoped to .members-app so it won't clash with your site ==== */
+    .members-app {
+      --bg: #0b0f19;
+      --panel: #11182a;
+      --panel-2: #0f1422;
+      --text: #e6e9ef;
+      --muted: #9aa4bf;
+      --accent: #6aa2ff;
+      --accent-2: #a678ff;
+      --accent-3: #ff7aa2;
+      --ring: rgba(106,162,255,.55);
+      --glow: 0 10px 60px rgba(106,162,255,.18), inset 0 0 0 1px rgba(255,255,255,.03);
+      color: var(--text);
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(106,162,255,.15), transparent 60%),
+                  radial-gradient(800px 600px at 110% 10%, rgba(255,122,162,.12), transparent 50%),
+                  var(--bg);
+      border-radius: 22px;
+      padding: clamp(16px, 4vw, 28px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+      position: relative;
+      overflow: clip;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, sans-serif;
+    }
+
+    .members-app .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px;
+      background: color-mix(in oklab, var(--panel) 70%, transparent);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px;
+      box-shadow: var(--glow);
+      backdrop-filter: blur(8px);
+    }
+    .members-app .brand {
+      display: grid; grid-auto-flow: column; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(106,162,255,.18), rgba(166,120,255,.18));
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .members-app .brand .logo {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: conic-gradient(from 40deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 4px 20px rgba(166,120,255,.25);
+    }
+    .members-app .brand h1 {
+      font-size: 16px; margin: 0; letter-spacing: .3px;
+    }
+    .members-app .nav .spacer { flex: 1; }
+    .members-app .btn {
+      appearance: none; border: 0; cursor: pointer;
+      padding: 10px 14px; border-radius: 12px; font-weight: 600;
+      color: white; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 6px 30px rgba(106,162,255,.35);
+      transition: transform .15s ease, box-shadow .2s ease;
+    }
+    .members-app .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 40px rgba(106,162,255,.45); }
+    .members-app .btn.ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: none;
+    }
+    .members-app .btn.ghost:hover { border-color: rgba(255,255,255,.2); }
+
+    .members-app .hero {
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(16px, 4vw, 28px);
+      margin-top: 18px;
+    }
+    @media (max-width: 900px) {
+      .members-app .hero { grid-template-columns: 1fr; }
+    }
+    .members-app .hero .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 18px; padding: clamp(16px, 3vw, 22px);
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: clip;
+    }
+    .members-app .hero h2 {
+      font-size: clamp(22px, 2.2vw, 28px); margin: 4px 0 6px 0;
+    }
+    .members-app .muted {
+      color: var(--muted);
+    }
+    .members-app .badges {
+      display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 8px;
+    }
+    .members-app .badge {
+      font-size: 12px; padding: 6px 10px; border-radius: 999px;
+      background: color-mix(in oklab, var(--panel-2) 80%, transparent);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .members-app .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .members-app .card {
+      grid-column: span 4;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px; padding: 16px;
+      box-shadow: var(--glow);
+      display: grid; gap: 10px;
+    }
+    @media (max-width: 1100px) { .members-app .card { grid-column: span 6; } }
+    @media (max-width: 700px) { .members-app .card { grid-column: span 12; } }
+    .members-app .card h3 { margin: 0 0 4px 0; font-size: 16px; letter-spacing: .2px; }
+    .members-app .card p { margin: 0; color: var(--muted); }
+
+    .members-app .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    .members-app .cta-row .btn { padding: 10px 12px; font-size: 14px; }
+
+    .members-app .tabs {
+      display: flex; gap: 6px; margin-top: 16px;
+      background: color-mix(in oklab, var(--panel) 70%, transparent);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 12px; padding: 6px;
+      box-shadow: var(--glow);
+      overflow: auto;
+    }
+    .members-app .tab {
+      padding: 8px 12px; border-radius: 10px; cursor: pointer; user-select: none;
+      border: 1px solid transparent; white-space: nowrap;
+      color: var(--muted);
+    }
+    .members-app .tab[aria-selected="true"] {
+      color: var(--text);
+      border-color: rgba(255,255,255,.12);
+      background: linear-gradient(135deg, rgba(106,162,255,.12), rgba(166,120,255,.12));
+    }
+    .members-app .tabpanels {
+      margin-top: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px; padding: 16px;
+      box-shadow: var(--glow);
+    }
+    .members-app .tabpanel { display: none; }
+    .members-app .tabpanel[aria-hidden="false"] { display: block; }
+
+    .members-app .list {
+      display: grid; gap: 10px; margin: 8px 0 0;
+    }
+    .members-app .list .item {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center;
+      padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,.06);
+      background: color-mix(in oklab, var(--panel) 70%, transparent);
+    }
+    .members-app .dot {
+      width: 10px; height: 10px; border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #8ad2ff, #2fb3ff 60%, #0c7bd9);
+      box-shadow: 0 0 18px rgba(47,179,255,.7);
+    }
+    .members-app .tag {
+      font-size: 12px; padding: 4px 8px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, rgba(106,162,255,.14), rgba(255,122,162,.14));
+      color: var(--text);
+    }
+
+    .members-app .footer {
+      margin-top: 22px;
+      display: grid; gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      justify-items: center;
+    }
+
+    .members-app .toast {
+      position: fixed; inset: auto 16px 16px auto;
+      background: color-mix(in oklab, var(--panel) 70%, transparent);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text); padding: 12px 14px; border-radius: 12px;
+      box-shadow: var(--glow);
+      transform: translateY(10px); opacity: 0;
+      transition: transform .2s ease, opacity .2s ease;
+      pointer-events: none; z-index: 50;
+    }
+    .members-app .toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+
+  <!-- Top bar -->
+  <div class="nav" role="navigation" aria-label="Member navigation">
+    <div class="brand" aria-label="Site brand">
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Members Area</h1>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="copyLinkBtn" title="Copy invite link">Copy Link</button>
+    <button class="btn" id="primaryCta">Download Pack</button>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero" role="region" aria-label="Welcome">
+    <div class="panel">
+      <p class="badge">Private Content</p>
+      <h2>Welcome in. You’ve unlocked the portal.</h2>
+      <p class="muted">This area holds resources, updates, and downloads reserved for members. The design is fully client-side and will render only after successful unlock.</p>
+
+      <div class="badges">
+        <span class="badge">Encrypted at rest</span>
+        <span class="badge">Cookie auto-unlock</span>
+        <span class="badge">Gradient UI</span>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn" id="getStarted">Get Started</button>
+        <button class="btn ghost" id="howItWorks">How it works</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="grid" style="grid-template-columns: repeat(6, 1fr); gap:10px;">
+        <div style="grid-column: span 3; aspect-ratio: 4/3; border-radius:14px; background:
+            radial-gradient(40% 50% at 30% 30%, rgba(106,162,255,.45), transparent 70%),
+            radial-gradient(40% 50% at 70% 70%, rgba(255,122,162,.35), transparent 70%),
+            linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+            border:1px solid rgba(255,255,255,.08); box-shadow: var(--glow);"></div>
+        <div style="grid-column: span 3; aspect-ratio: 4/3; border-radius:14px; background:
+            radial-gradient(40% 50% at 70% 30%, rgba(166,120,255,.45), transparent 70%),
+            radial-gradient(40% 50% at 30% 70%, rgba(106,162,255,.35), transparent 70%),
+            linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+            border:1px solid rgba(255,255,255,.08); box-shadow: var(--glow);"></div>
+        <div style="grid-column: span 6; height: 90px; border-radius:14px; background:
+            linear-gradient(90deg, rgba(106,162,255,.18), rgba(166,120,255,.18), rgba(255,122,162,.18));
+            border:1px solid rgba(255,255,255,.08); box-shadow: var(--glow);"></div>
+      </div>
+      <p class="muted" style="margin-top:10px;">This right-hand area is a decorative “glass” gallery. Replace with screenshots or artwork if you want—just swap the divs for images.</p>
+    </div>
+  </div>
+
+  <!-- Feature Cards -->
+  <div class="grid" role="region" aria-label="Highlights">
+    <article class="card">
+      <h3>Latest Build</h3>
+      <p>Get the newest release with preconfigured settings.</p>
+      <div class="cta-row">
+        <a class="btn" href="#" download>Download</a>
+        <button class="btn ghost" data-tip="Checksum copied">Copy Checksum</button>
+      </div>
+    </article>
+    <article class="card">
+      <h3>Changelog</h3>
+      <p>Readable summaries of what changed and why.</p>
+      <div class="cta-row">
+        <a class="btn ghost" href="#changelog">Read Notes</a>
+        <button class="btn" data-tip="Subscribed">Subscribe</button>
+      </div>
+    </article>
+    <article class="card">
+      <h3>Support</h3>
+      <p>Hit a snag? Get quick help and known fixes.</p>
+      <div class="cta-row">
+        <a class="btn ghost" href="#support">Get Help</a>
+        <button class="btn" data-tip="Email copied">Email Us</button>
+      </div>
+    </article>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist" aria-label="Member tabs">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="tab1" id="t1">Changelog</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab2" id="t2">Downloads</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="tab3" id="t3">FAQ</button>
+  </div>
+
+  <div class="tabpanels">
+    <section class="tabpanel" id="tab1" role="tabpanel" aria-labelledby="t1" aria-hidden="false">
+      <ul class="list" id="changelog">
+        <li class="item">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <strong>v1.4.2</strong> – Stability pass and UI polish.
+            <div class="muted">Improved gradient blending and cookie scope.</div>
