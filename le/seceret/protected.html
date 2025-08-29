@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Protected Page</title>
+<style>
+  :root { color-scheme: dark; }
+  html,body { margin:0; padding:0; background:#0b0f19; color:#e6e9ef; font-family: system-ui, sans-serif; }
+  .center { min-height:100svh; display:grid; place-items:center; }
+  .card { width:min(420px,92vw); background:#11182a; border-radius:16px; padding:22px; box-shadow:0 8px 40px rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.06); }
+  h1 { margin:0 0 8px; font-size:1.25rem; }
+  .hint { opacity:.85; margin:0 0 14px; }
+  .field { margin:12px 0 18px; display:flex; flex-direction:column; gap:8px; }
+  input { padding:12px 14px; border-radius:12px; border:1px solid #2a3550; background:#0f1422; color:#e6e9ef; }
+  .row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .btn { border:0; padding:12px 16px; border-radius:12px; font-weight:600; cursor:pointer; background:#2a7ade; color:white; }
+  .err { color:#ff6b6b; margin-top:10px; min-height:1.2em; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<div id="gate" class="center">
+  <div class="card">
+    <h1>Enter Passcode</h1>
+    <p class="hint">You’ll stay signed in until the cookie expires or the passcode changes.</p>
+    <div class="field">
+      <label for="code">Passcode</label>
+      <input id="code" type="password" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <div class="row">
+      <label><input id="remember" type="checkbox" checked> Remember 14 days</label>
+      <button id="go" class="btn">Unlock</button>
+    </div>
+    <div id="err" class="err"></div>
+  </div>
+</div>
+
+<!-- Decrypted content will be injected here -->
+<main id="app" class="hidden"></main>
+
+<script>
+const COOKIE_NAME = "sp_auth";
+const DEFAULT_REMEMBER_DAYS = 14;
+const BLOB_URL = "blob.json";
+
+const te = new TextEncoder(), td = new TextDecoder();
+const hexToBytes = hex => new Uint8Array(hex.match(/.{1,2}/g).map(b=>parseInt(b,16)));
+const b64ToBytes = b64 => Uint8Array.from(atob(b64), c=>c.charCodeAt(0));
+const bytesToHex = bytes => Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join('');
+
+async function sha256Hex(s) {
+  const buf = await crypto.subtle.digest("SHA-256", te.encode(s));
+  return bytesToHex(new Uint8Array(buf));
+}
+async function deriveAesKey(passHashHex, saltB64, iter) {
+  const baseKey = await crypto.subtle.importKey("raw", hexToBytes(passHashHex), { name:"PBKDF2" }, false, ["deriveKey"]);
+  return crypto.subtle.deriveKey(
+    { name:"PBKDF2", salt:b64ToBytes(saltB64), iterations:iter, hash:"SHA-256" },
+    baseKey, { name:"AES-GCM", length:256 }, false, ["decrypt"]
+  );
+}
+async function decryptBlob(blob, passHashHex) {
+  const key = await deriveAesKey(passHashHex, blob.salt_b64, blob.iter);
+  const ptBuf = await crypto.subtle.decrypt({ name:"AES-GCM", iv:b64ToBytes(blob.nonce_b64) }, key, b64ToBytes(blob.ct_b64));
+  return td.decode(ptBuf);
+}
+function setCookie(val, days) {
+  const path = location.pathname.replace(/[^/]+$/, '') || '/';
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(val)}; Max-Age=${days*86400}; Path=${path}; SameSite=Lax; Secure`;
+}
+function getCookie() {
+  const m = document.cookie.match(new RegExp(`(?:^|;\\s*)${COOKIE_NAME}=([^;]+)`));
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+let BLOB = null;
+async function ensureBlob() {
+  if (BLOB) return BLOB;
+  const res = await fetch(BLOB_URL, { cache: 'no-store' });
+  if (!res.ok) throw new Error("blob.json missing");
+  BLOB = await res.json();
+  return BLOB;
+}
+
+async function unlockWithHash(passHashHex, days) {
+  try {
+    const blob = await ensureBlob();
+    const html = await decryptBlob(blob, passHashHex);
+    setCookie(passHashHex, days);
+    document.getElementById('gate').classList.add('hidden');
+    const app = document.getElementById('app');
+    app.innerHTML = html;
+    app.classList.remove('hidden');
+    return true;
+  } catch { return false; }
+}
+
+(async () => {
+  try {
+    const saved = getCookie();
+    if (saved) await unlockWithHash(saved, DEFAULT_REMEMBER_DAYS);
+  } catch {
+    document.getElementById('err').textContent = 'Missing blob.json (commit it next to protected.html).';
+  }
+})();
+
+document.getElementById('go').addEventListener('click', async () => {
+  const err = document.getElementById('err'); err.textContent = '';
+  try { await ensureBlob(); } catch { err.textContent = 'Missing blob.json (commit it).'; return; }
+  const code = document.getElementById('code').value;
+  const days = document.getElementById('remember').checked ? DEFAULT_REMEMBER_DAYS : 1;
+  if (!code) { err.textContent = 'Enter the passcode.'; return; }
+  const hash = await sha256Hex(code);
+  if (!await unlockWithHash(hash, days)) err.textContent = 'Incorrect passcode.';
+});
+</script>
+</body>
+</html>
