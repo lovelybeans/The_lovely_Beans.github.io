@@ -280,3 +280,120 @@
           <div>
             <strong>v1.4.2</strong> – Stability pass and UI polish.
             <div class="muted">Improved gradient blending and cookie scope.</div>
+          </div>
+          <span class="tag">Now</span>
+        </li>
+        <li class="item">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <strong>v1.4.1</strong> – Access improvements.
+            <div class="muted">Auto-unlock retry + better toasts.</div>
+          </div>
+          <span class="tag">Recent</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="tabpanel" id="tab2" role="tabpanel" aria-labelledby="t2" aria-hidden="true">
+      <div class="list">
+        <div class="item">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <strong>Primary Pack</strong>
+            <div class="muted">Recommended bundle with defaults.</div>
+          </div>
+          <a class="btn" href="#" download>Download</a>
+        </div>
+        <div class="item">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <strong>Tools</strong>
+            <div class="muted">Utility scripts and add-ons.</div>
+          </div>
+          <a class="btn ghost" href="#">Browse</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="tabpanel" id="tab3" role="tabpanel" aria-labelledby="t3" aria-hidden="true">
+      <div class="list">
+        <div class="item">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <strong>How long will I stay signed in?</strong>
+            <div class="muted">Usually 14 days or until the passcode changes.</div>
+          </div>
+          <span class="tag">Cookies</span>
+        </div>
+        <div class="item">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <strong>Passcode changed but I can’t access.</strong>
+            <div class="muted">Refresh the page and re-enter the new code.</div>
+          </div>
+          <span class="tag">Access</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>You’re viewing private content delivered after client-side decryption.</div>
+    <div>Tip: keep downloads behind hard-to-guess URLs, and rotate the passcode periodically.</div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Tabs
+    const tabs = document.querySelectorAll('.members-app .tab');
+    const panels = document.querySelectorAll('.members-app .tabpanel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+        panels.forEach(p => p.setAttribute('aria-hidden', p.id === tab.getAttribute('aria-controls') ? 'false' : 'true'));
+      });
+    });
+
+    // Toast helper
+    const toast = document.getElementById('toast');
+    function showToast(text, ms = 1800) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove('show'), ms);
+    }
+
+    // Example actions
+    document.getElementById('copyLinkBtn').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        showToast('Link copied');
+      } catch { showToast('Clipboard blocked'); }
+    });
+
+    document.querySelectorAll('.members-app [data-tip]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const tip = btn.getAttribute('data-tip');
+        if (tip.includes('Email')) {
+          try { await navigator.clipboard.writeText('support@example.com'); } catch {}
+        } else if (tip.includes('Checksum')) {
+          try { await navigator.clipboard.writeText('sha256: 00000000000000000000000000000000'); } catch {}
+        }
+        showToast(tip);
+      });
+    });
+
+    // Primary CTAs
+    document.getElementById('primaryCta').addEventListener('click', () => showToast('Starting download…'));
+    document.getElementById('getStarted').addEventListener('click', () => {
+      tabs[0].click();
+      showToast('Opened Changelog');
+    });
+    document.getElementById('howItWorks').addEventListener('click', () => {
+      tabs[2].click();
+      showToast('Opened FAQ');
+    });
+  </script>
+</section>
