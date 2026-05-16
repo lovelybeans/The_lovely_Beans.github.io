@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Translator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0e15;
+            --panel-color: #161925;
+            --accent-glow: #00f0ff;
+            --accent-purple: #7000ff;
+            --text-main: #f0f3f8;
+            --text-muted: #7a889b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: var(--accent-purple);
+            filter: blur(150px);
+            top: 15%;
+            left: 15%;
+            z-index: -1;
+            opacity: 0.25;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--panel-color);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+                        0 0 40px rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(45deg, var(--accent-glow), #a600ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 300;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .translator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .translator-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .pane {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent-glow);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            color: var(--text-main);
+            font-size: 1.15rem;
+            line-height: 1.6;
+            resize: none;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea::placeholder {
+            color: rgba(122, 136, 155, 0.4);
+        }
+        
+        .alien-font {
+            font-size: 1.35rem;
+            letter-spacing: 1.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CHAR CHAR TRANSLATOR</h1>
+        <h1>☊⊑⏃⍀ ☊⊑⏃⍀ ⌰⏃⋏⊌☋⏃⊌⟒ ⏁⍀⏃⋏⌇⌰⏃⏁⍜⍀</h1>
+    </header>
+
+    <div class="translator-grid">
+        <div class="pane">
+            <label for="english-input">Human (English)</label>
+            <textarea id="english-input" placeholder="Type English here..."></textarea>
+        </div>
+
+        <div class="pane">
+            <label for="alien-input">Char Char Language</label>
+            <textarea id="alien-input" class="alien-font" placeholder="⍜⍀ ⏁⎅⏈⟒ ☊⊑⏃⍀ ☊⊑⏃⍀ ⊑⟒⍀⟒..."></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Translation Maps
+    const engToAlien = {
+        'a': '⏃', 'b': '⏁', 'c': '☊', 'd': '☌', 'e': '⟒', 'f': '⎎', 'g': '⊌', 
+        'h': '⊑', 'i': '⟟', 'j': '⟊', 'k': '☍', 'l': '⌰', 'm': '☿', 'n': '⋏', 
+        'o': '⍜', 'p': '⏈', 'q': '☌', 'r': '⍀', 's': '⌇', 't': '⏁', 'u': '☋', 
+        'v': '☲', 'w': '☱', 'x': '⌖', 'y': '⎅', 'z': '⎓', "'": '⟠'
+    };
+
+    // Auto-generate reverse map for Alien -> English decoding
+    const alienToEng = {};
+    for (const [key, value] of Object.entries(engToAlien)) {
+        alienToEng[value] = key;
+    }
+
+    const englishInput = document.getElementById('english-input');
+    const alienInput = document.getElementById('alien-input');
+
+    // Translate English -> Alien
+    englishInput.addEventListener('input', (e) => {
+        const text = e.target.value;
+        let translated = '';
+        
+        for (let char of text) {
+            const lowerChar = char.toLowerCase();
+            // If we have a translation for the character, use it; otherwise leave it as-is
+            translated += engToAlien[lowerChar] ? engToAlien[lowerChar] : char;
+        }
+        
+        alienInput.value = translated;
+    });
+
+    // Translate Alien -> English
+    alienInput.addEventListener('input', (e) => {
+        const text = e.target.value;
+        let decoded = '';
+        
+        for (let char of text) {
+            // Check if the symbol exists in our reverse dictionary
+            decoded += alienToEng[char] ? alienToEng[char] : char;
+        }
+        
+        englishInput.value = decoded;
+    });
+</script>
+
+</body>
+</html>
