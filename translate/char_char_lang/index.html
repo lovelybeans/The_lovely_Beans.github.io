@@ -161,6 +161,23 @@
 </div>
 
 <script>
+    (function() {
+        const session = localStorage.getItem('gatekeeper_session');
+        const now = new Date().getTime();
+        const thirtyDays = 30 * 24 * 60 * 60 * 1000; // Time in milliseconds
+
+        if (!session) {
+            // No session found, send to password page
+            window.location.href = 'password.html';
+        } else {
+            const sessionData = JSON.parse(session);
+            if (now - sessionData.timestamp > thirtyDays) {
+                // Session expired (older than 30 days)
+                localStorage.removeItem('gatekeeper_session');
+                window.location.href = 'password.html';
+            }
+        }
+    })();
     // Translation Maps
     const engToAlien = {
         'a': '⏃', 'b': '⏁', 'c': '☊', 'd': '☌', 'e': '⟒', 'f': '⎎', 'g': '⊌', 
