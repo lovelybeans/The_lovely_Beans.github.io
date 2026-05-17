@@ -170,6 +170,12 @@
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
 
+        /* Container to position the copy button inside the textarea */
+        .textarea-container {
+            position: relative;
+            width: 100%;
+        }
+
         textarea {
             width: 100%;
             height: 200px;
@@ -177,6 +183,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 20px;
+            padding-top: 45px; /* Added padding so text doesn't hide behind the button */
             color: var(--text-main);
             font-size: 1.15rem;
             line-height: 1.6;
@@ -201,6 +208,39 @@
             font-size: 1.35rem;
             letter-spacing: 1.5px;
         }
+
+        /* Copy Button Styles */
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 5;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--accent-glow);
+            color: var(--accent-glow);
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: rgba(112, 0, 255, 0.2);
+            border-color: #a600ff;
+            color: var(--text-main);
+            box-shadow: 0 0 8px rgba(112, 0, 255, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -208,7 +248,7 @@
 <div class="container">
     <header>
         <h1>The_Lovely_Beans Translator</h1>
-        <h2>Æ-Or-V'Tarvirlornaessaeluslortarorxvir</h1>
+        <h2>Æ-Or-V'Tarvirlornaessaeluslortarorxvir</h2>
     </header>
 
     <div class="controls">
@@ -222,12 +262,18 @@
     <div class="translator-grid">
         <div class="pane">
             <label for="english-input">Gross regular language</label>
-            <textarea id="english-input" placeholder="Type English here..."></textarea>
+            <div class="textarea-container">
+                <button class="copy-btn" onclick="copyText('english-input', this)">Copy</button>
+                <textarea id="english-input" placeholder="Type English here..."></textarea>
+            </div>
         </div>
 
         <div class="pane">
             <label for="alien-input">Vaelen</label>
-            <textarea id="alien-input" class="alien-font" placeholder="Translation output..."></textarea>
+            <div class="textarea-container">
+                <button class="copy-btn" onclick="copyText('alien-input', this)">Copy</button>
+                <textarea id="alien-input" class="alien-font" placeholder="Translation output..."></textarea>
+            </div>
         </div>
     </div>
 </div>
@@ -238,21 +284,42 @@
     // =========================================================================
     
     const CONFIG_STANDARD = {
-    'a': 'laenorva', 'b': 'vaexithon', 'c': 'krosythi', 'd': 'maerorva', 'e': 'aelisian', 
-    'f': 'sythvane', 'g': 'zarnthra', 'h': 'thraelyn', 'i': 'koznvior', 'j': 'jxorvaen', 
-    'k': 'kavaluna', 'l': 'lunaraes', 'm': 'mirasael', 'n': 'naestara', 'o': 'orvaxith', 
-    'p': 'phelzith', 'q': 'quonvuhn', 'r': 'viorlyva', 's': 'saelkozn', 't': 'taraseth', 
-    'u': 'vuhnmira', 'v': 'vanequon', 'w': 'wynnthra', 'x': 'xiomaris', 'y': 'ylvazarn', 'z': 'zionvane'
-};
+        'a': 'laenorva', 'b': 'vaexithon', 'c': 'krosythi', 'd': 'maerorva', 'e': 'aelisian', 
+        'f': 'sythvane', 'g': 'zarnthra', 'h': 'thraelyn', 'i': 'koznvior', 'j': 'jxorvaen', 
+        'k': 'kavaluna', 'l': 'lunaraes', 'm': 'mirasael', 'n': 'naestara', 'o': 'orvaxith', 
+        'p': 'phelzith', 'q': 'quonvuhn', 'r': 'viorlyva', 's': 'saelkozn', 't': 'taraseth', 
+        'u': 'vuhnmira', 'v': 'vanequon', 'w': 'wynnthra', 'x': 'xiomaris', 'y': 'ylvazarn', 'z': 'zionvane'
+    };
 
-// Config 2: Compact Mode (Pure 1:1 character replacements, 3-4 characters)
-const CONFIG_COMPACT = {
-    'a': 'lor',  'b': 'veth', 'c': 'kro',  'd': 'mor',  'e': 'ael', 
-    'f': 'syl',  'g': 'zae',  'h': 'thar', 'i': 'lia',  'j': 'jox', 
-    'k': 'kael', 'l': 'lus',  'm': 'mir',  'n': 'naes', 'o': 'orx', 
-    'p': 'phae', 'q': 'quor', 'r': 'vir',  's': 'sae',  't': 'tar', 
-    'u': 'vua',  'v': 'vel',  'w': 'wyn',  'x': 'xith', 'y': 'yla',  'z': 'zith'
-};
+    // Config 2: Compact Mode (Pure 1:1 character replacements, 3-4 characters)
+    const CONFIG_COMPACT = {
+        'a': 'lor',  'b': 'veth', 'c': 'kro',  'd': 'mor',  'e': 'ael', 
+        'f': 'syl',  'g': 'zae',  'h': 'thar', 'i': 'lia',  'j': 'jox', 
+        'k': 'kael', 'l': 'lus',  'm': 'mir',  'n': 'naes', 'o': 'orx', 
+        'p': 'phae', 'q': 'quor', 'r': 'vir',  's': 'sae',  't': 'tar', 
+        'u': 'vua',  'v': 'vel',  'w': 'wyn',  'x': 'xith', 'y': 'yla',  'z': 'zith'
+    };
+
+    // =========================================================================
+    //   COPY TO CLIPBOARD FUNCTION
+    // =========================================================================
+    function copyText(textareaId, buttonElement) {
+        const textarea = document.getElementById(textareaId);
+        if (!textarea.value.trim()) return; // Don't copy empty boxes
+
+        navigator.clipboard.writeText(textarea.value).then(() => {
+            buttonElement.innerText = "Copied!";
+            buttonElement.classList.add('copied');
+            
+            // Reset button state after 1.5 seconds
+            setTimeout(() => {
+                buttonElement.innerText = "Copy";
+                buttonElement.classList.remove('copied');
+            }, 1500);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
 
     // =========================================================================
     //   TRANSLATION WORKHORSE MACHINERY (AUTO-GENERATED BASED ON CONFIGS)
@@ -293,7 +360,7 @@ const CONFIG_COMPACT = {
     function getActiveDictionaries() {
         let base = compactToggle.checked ? CONFIG_COMPACT : CONFIG_STANDARD;
         let singleForward = createCaseMaps(base);
-        let doubleForward = compactToggle.checked ? {} : createDoubleMaps(base); // Doubles disabled in pure 1:1 compact
+        let doubleForward = compactToggle.checked ? {} : createDoubleMaps(base);
 
         let singleReverse = {};
         for (let [k, v] of Object.entries(singleForward)) { singleReverse[v] = k; }
