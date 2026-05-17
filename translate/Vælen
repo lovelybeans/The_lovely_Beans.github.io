@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Translator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0e15;
+            --panel-color: #161925;
+            --accent-glow: #00f0ff;
+            --accent-purple: #7000ff;
+            --text-main: #f0f3f8;
+            --text-muted: #7a889b;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: var(--accent-purple);
+            filter: blur(150px);
+            top: 15%;
+            left: 15%;
+            z-index: -1;
+            opacity: 0.25;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--panel-color);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+                        0 0 40px rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-family: 'Alice', 'Kurale', serif;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(45deg, var(--accent-glow), #a600ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        h2 {
+            font-family: 'Alice', 'Kurale', serif;
+            background: linear-gradient(45deg, var(--accent-glow), #a600ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .switch-label {
+            font-family: 'Alice', 'Kurale', serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-right: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-main);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: rgba(0, 240, 255, 0.2);
+            border-color: var(--accent-glow);
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(26px);
+            background-color: var(--accent-glow);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .translator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .translator-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .pane {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-family: 'Alice', 'Kurale', serif;
+            font-size: 0.85rem;
+            color: var(--accent-glow);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            color: var(--text-main);
+            font-size: 1.15rem;
+            line-height: 1.6;
+            resize: none;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea::placeholder {
+            color: rgba(122, 136, 155, 0.4);
+        }
+        
+        .alien-font {
+            font-size: 1.35rem;
+            letter-spacing: 1.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>The_Lovely_Beans Translator</h1>
+        <h2>Æ-Or-V'Tarvirlornaessaeluslortarorxvir</h1>
+    </header>
+
+    <div class="controls">
+        <span class="switch-label" id="mode-text">Standard Mode</span>
+        <label class="switch">
+            <input type="checkbox" id="compact-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="translator-grid">
+        <div class="pane">
+            <label for="english-input">Human (English)</label>
+            <textarea id="english-input" placeholder="Type English here..."></textarea>
+        </div>
+
+        <div class="pane">
+            <label for="alien-input">Char Char Language</label>
+            <textarea id="alien-input" class="alien-font" placeholder="Translation output..."></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    // =========================================================================
+    //   USER CONFIGURATION BLOCKS (EDIT THESE FREELY)
+    // =========================================================================
+    
+    const CONFIG_STANDARD = {
+    'a': 'laenorva', 'b': 'vaexithon', 'c': 'krosythi', 'd': 'maerorva', 'e': 'aelisian', 
+    'f': 'sythvane', 'g': 'zarnthra', 'h': 'thraelyn', 'i': 'koznvior', 'j': 'jxorvaen', 
+    'k': 'kavaluna', 'l': 'lunaraes', 'm': 'mirasael', 'n': 'naestara', 'o': 'orvaxith', 
+    'p': 'phelzith', 'q': 'quonvuhn', 'r': 'viorlyva', 's': 'saelkozn', 't': 'taraseth', 
+    'u': 'vuhnmira', 'v': 'vanequon', 'w': 'wynnthra', 'x': 'xiomaris', 'y': 'ylvazarn', 'z': 'zionvane'
+};
+
+// Config 2: Compact Mode (Pure 1:1 character replacements, 3-4 characters)
+const CONFIG_COMPACT = {
+    'a': 'lor',  'b': 'veth', 'c': 'kro',  'd': 'mor',  'e': 'ael', 
+    'f': 'syl',  'g': 'zae',  'h': 'thar', 'i': 'lia',  'j': 'jox', 
+    'k': 'kael', 'l': 'lus',  'm': 'mir',  'n': 'naes', 'o': 'orx', 
+    'p': 'phae', 'q': 'quor', 'r': 'vir',  's': 'sae',  't': 'tar', 
+    'u': 'vua',  'v': 'vel',  'w': 'wyn',  'x': 'xith', 'y': 'yla',  'z': 'zith'
+};
+
+    // =========================================================================
+    //   TRANSLATION WORKHORSE MACHINERY (AUTO-GENERATED BASED ON CONFIGS)
+    // =========================================================================
+
+    function createCaseMaps(baseMap) {
+        let fullMap = {};
+        for (let [k, v] of Object.entries(baseMap)) {
+            fullMap[k.toLowerCase()] = v.toLowerCase();
+            fullMap[k.toUpperCase()] = v.charAt(0).toUpperCase() + v.slice(1);
+        }
+        return fullMap;
+    }
+
+    function createDoubleMaps(baseMap) {
+        let doubleMap = {};
+        for (let [k, v] of Object.entries(baseMap)) {
+            doubleMap[k.toLowerCase() + k.toLowerCase()] = v.toLowerCase() + "vax";
+            doubleMap[k.toUpperCase() + k.toLowerCase()] = v.charAt(0).toUpperCase() + v.slice(1) + "vax";
+        }
+        return doubleMap;
+    }
+
+    const englishInput = document.getElementById('english-input');
+    const alienInput = document.getElementById('alien-input');
+    const compactToggle = document.getElementById('compact-toggle');
+    const modeText = document.getElementById('mode-text');
+
+    let activeLock = false;
+
+    compactToggle.addEventListener('change', () => {
+        modeText.innerText = compactToggle.checked ? "Compact Mode" : "Standard Mode";
+        if (!activeLock) triggerSync();
+    });
+
+    function triggerSync() { englishInput.dispatchEvent(new Event('input')); }
+
+    function getActiveDictionaries() {
+        let base = compactToggle.checked ? CONFIG_COMPACT : CONFIG_STANDARD;
+        let singleForward = createCaseMaps(base);
+        let doubleForward = compactToggle.checked ? {} : createDoubleMaps(base); // Doubles disabled in pure 1:1 compact
+
+        let singleReverse = {};
+        for (let [k, v] of Object.entries(singleForward)) { singleReverse[v] = k; }
+        
+        let doubleReverse = {};
+        for (let [k, v] of Object.entries(doubleForward)) { doubleReverse[v] = k; }
+
+        let allReverseSyllables = [...Object.keys(doubleReverse), ...Object.keys(singleReverse)]
+            .sort((a, b) => b.length - a.length);
+
+        return { singleForward, doubleForward, singleReverse, doubleReverse, allReverseSyllables };
+    }
+
+    function translateWord(word, dicts) {
+        let normalized = word.toLowerCase().replace(/_/g, ' ');
+        if (normalized === "the lovely beans") return "Æ-Or-V";
+
+        let alienWord = '';
+        let charIdx = 0;
+        while (charIdx < word.length) {
+            let doubleCheck = word.substr(charIdx, 2);
+            let singleCheck = word[charIdx];
+
+            if (dicts.doubleForward[doubleCheck]) {
+                alienWord += dicts.doubleForward[doubleCheck];
+                charIdx += 2;
+            } else if (dicts.singleForward[singleCheck]) {
+                alienWord += dicts.singleForward[singleCheck];
+                charIdx += 1;
+            } else {
+                alienWord += singleCheck;
+                charIdx += 1;
+            }
+        }
+        return alienWord;
+    }
+
+    function decodeWord(alienWord, dicts) {
+        if (!alienWord || alienWord === "Æ-Or-V") return "The_Lovely_Beans";
+        let plainWord = '';
+        let idx = 0;
+        while (idx < alienWord.length) {
+            let matched = false;
+            for (const syllable of dicts.allReverseSyllables) {
+                if (alienWord.substr(idx, syllable.length) === syllable) {
+                    plainWord += dicts.doubleReverse[syllable] || dicts.singleReverse[syllable];
+                    idx += syllable.length;
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) { plainWord += alienWord[idx]; idx++; }
+        }
+        return plainWord;
+    }
+
+    // Forward Translation Loop
+    englishInput.addEventListener('input', () => {
+        if (activeLock) return;
+        activeLock = true;
+
+        const text = englishInput.value;
+        if (!text.trim()) { alienInput.value = ''; activeLock = false; return; }
+
+        let dicts = getActiveDictionaries();
+        let lines = text.split(/([\n.!?]+)/);
+        let finalAlienLines = [];
+
+        for (let l = 0; l < lines.length; l++) {
+            let line = lines[l];
+            if (l % 2 !== 0 || !line.trim()) { finalAlienLines.push(line); continue; }
+
+            let tokens = line.split(/(\s+|,|;)/);
+            let wordsIndices = [];
+            
+            for (let i = 0; i < tokens.length; i++) {
+                if (/[A-Za-z0-9_]/.test(tokens[i])) wordsIndices.push(i);
+            }
+
+            for (let i = 0; i < tokens.length; i++) {
+                if (/[A-Za-z0-9_]/.test(tokens[i])) tokens[i] = translateWord(tokens[i], dicts);
+            }
+
+            if (wordsIndices.length > 1) {
+                let firstIdx = wordsIndices[0];
+                let secondIdx = wordsIndices[1];
+
+                let hasComma = tokens[firstIdx + 1] && tokens[firstIdx + 1].trim() === ',';
+                if (hasComma) tokens[firstIdx + 1] = '';
+
+                let joinChar = hasComma ? ';' : "'";
+
+                tokens[firstIdx] = tokens[firstIdx] + joinChar + tokens[secondIdx];
+                tokens[secondIdx] = '';
+                for (let k = firstIdx + 1; k < secondIdx; k++) tokens[k] = '';
+            }
+
+            finalAlienLines.push(tokens.join(''));
+        }
+
+        alienInput.value = finalAlienLines.join('');
+        activeLock = false;
+    });
+
+    // Reverse Decoding Loop
+    alienInput.addEventListener('input', () => {
+        if (activeLock) return;
+        activeLock = true;
+
+        const text = alienInput.value;
+        if (!text.trim()) { englishInput.value = ''; activeLock = false; return; }
+
+        let dicts = getActiveDictionaries();
+        let lines = text.split(/([\n.!?]+)/);
+        let finalEnglishLines = [];
+
+        for (let l = 0; l < lines.length; l++) {
+            let line = lines[l];
+            if (l % 2 !== 0 || !line.trim()) { finalEnglishLines.push(line); continue; }
+
+            let tokens = line.split(/(\s+|'|;)/);
+            tokens = tokens.filter(t => t !== '');
+
+            let rebuiltTokens = [];
+            let i = 0;
+
+            while (i < tokens.length) {
+                let token = tokens[i];
+
+                if (/[A-Za-z0-9_⏃⏁☊⎅⟒⌇⊌⏈⍜⟌☍⌰⎎⋏⍀⏁☋⎎]+/.test(token)) {
+                    rebuiltTokens.push(decodeWord(token, dicts));
+                } else {
+                    if (token === "'") { rebuiltTokens.push(' '); } 
+                    else if (token === ";") { rebuiltTokens.push(', '); } 
+                    else { rebuiltTokens.push(token); }
+                }
+                i++;
+            }
+
+            finalEnglishLines.push(rebuiltTokens.join(''));
+        }
+
+        let outputText = finalEnglishLines.join('');
+        englishInput.value = outputText.replace(/\s+,/g, ',').replace(/\s+/g, ' ');
+        activeLock = false;
+    });
+</script>
+</body>
+</html>
