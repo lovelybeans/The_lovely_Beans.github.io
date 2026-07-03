@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save Video to Photos</title>
+    <title>Download Video</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -13,79 +13,109 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #000; /* Dark background looks better for video */
-            color: #fff;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
             text-align: center;
         }
-        .container {
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             max-width: 90%;
-            width: 450px;
-            padding: 20px;
+            width: 400px;
             box-sizing: border-box;
         }
-        video {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
+        .file-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
         }
-        .instructions {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            line-height: 1.4;
+        .file-info {
+            color: #86868b;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
-        .desktop-btn {
-            display: inline-block;
+        .btn {
+            display: block;
             background-color: #0071e3;
             color: white;
-            padding: 12px 24px;
+            padding: 14px 20px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background-color: #0077ed;
+        }
+        .instructions {
+            margin-top: 20px;
+            background: #f5f5f7;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            text-align: left;
+            line-height: 1.4;
+            color: #515154;
+        }
+        ol {
+            margin: 5px 0 0 20px;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- 1. Replace with your actual video link -->
-        <video id="my-video" controls playsinline src="https://github.com/lovelybeans/The_lovely_Beans.github.io/releases/download/a/IMG_2511.1.MOV"></video>
+    <div class="card">
+        <div class="file-icon">🎬</div>
+        <h2>Your Video Download</h2>
+        <!-- Update the size text if needed so users know it's a big download -->
+        <div class="file-info">Format: MP4 &bull; Size: ~1.5 GB</div>
         
-        <div id="instruction-box" class="instructions">
-            Detecting your device...
+        <!-- Put your GitHub Release URL in the href here -->
+        <a id="download-btn" class="btn" href="https://github.com/lovelybeans/The_lovely_Beans.github.io/releases/download/a/IMG_2511.1.MOV" download>
+            Download Video
+        </a>
+        
+        <div id="instructions-box" class="instructions">
+            <!-- Dynamic instructions will insert here -->
         </div>
     </div>
 
     <script>
-        function setupPageByDevice() {
+        function setInstructions() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const instructionBox = document.getElementById("instruction-box");
-            const videoElement = document.getElementById("my-video");
-            const videoUrl = videoElement.src;
+            const box = document.getElementById("instructions-box");
 
-            // Check for iOS
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                instructionBox.innerHTML = "<strong>To save to your Photos app:</strong><br>Tap and hold the video above, then select <strong>'Save Video'</strong> or <strong>'Add to Photos'</strong>.";
-                return;
+                box.innerHTML = `
+                    <strong>iPhone/iPad Instructions:</strong>
+                    <ol>
+                        <li>Tap the blue button above.</li>
+                        <li>Confirm the download prompt in Safari/Chrome.</li>
+                        <li>Once finished, open your phone's <strong>Files App</strong>.</li>
+                        <li>Tap the video, press the <strong>Share Icon</strong> (bottom left), and tap <strong>"Save Video"</strong> to send it to your Photos app.</li>
+                    </ol>
+                `;
+            } else if (/android/i.test(userAgent)) {
+                box.innerHTML = `
+                    <strong>Android Instructions:</strong>
+                    <ol>
+                        <li>Tap the blue button to begin downloading.</li>
+                        <li>Because it is 1.5GB, check your notification shade for progress.</li>
+                        <li>Once complete, it will automatically show up inside your <strong>Google Photos</strong> or <strong>Gallery</strong> app.</li>
+                    </ol>
+                `;
+            } else {
+                box.innerHTML = `<strong>Desktop Computer:</strong> Click the button above to save the file straight to your local hard drive.`;
             }
-
-            // Check for Android
-            if (/android/i.test(userAgent)) {
-                instructionBox.innerHTML = "<strong>To save to your Gallery:</strong><br>Tap and hold the video, then select <strong>'Download video'</strong>. It will automatically appear in your photos/gallery.";
-                return;
-            }
-
-            // Desktop Fallback (Standard download button)
-            instructionBox.innerHTML = `
-                <p>You are on a desktop computer.</p>
-                <a class="desktop-btn" href="${videoUrl}" download>Download Video File</a>
-            `;
         }
 
-        window.onload = setupPageByDevice;
+        window.onload = setInstructions;
     </script>
 </body>
 </html>
